@@ -220,5 +220,143 @@ namespace WebApplication1.Controllers
 
             return View(lessons);
         }
+
+        [Authorize(Roles = "Ученик")]
+        [HttpPost]
+        public async Task<IActionResult> SignUp(int id)
+        {
+            // Получаем урок
+            var lesson = await _context.Lessons
+                .Include(l => l.Tutor)
+                .FirstOrDefaultAsync(l => l.Id == id);
+
+            if (lesson == null)
+            {
+                TempData["Error"] = "Урок не найден";
+                return RedirectToAction(nameof(Search));
+            }
+
+            // Проверяем, не прошел ли уже урок
+            if (lesson.StartTime < DateTime.Now)
+            {
+                TempData["Error"] = "Нельзя записаться на прошедший урок";
+                return RedirectToAction(nameof(Search));
+            }
+
+            // Получаем текущего пользователя
+            var studentEmail = User.FindFirstValue(ClaimTypes.Email);
+            var student = await _context.Users.FirstOrDefaultAsync(u => u.Email == studentEmail);
+
+            if (student == null)
+            {
+                TempData["Error"] = "Пользователь не найден";
+                return RedirectToAction(nameof(Search));
+            }
+
+            // Проверяем, не является ли ученик учителем этого урока
+            if (student.Id == lesson.TutorId)
+            {
+                TempData["Error"] = "Вы не можете записаться на свой урок";
+                return RedirectToAction(nameof(Search));
+            }
+
+            // Проверяем, не записан ли уже ученик на этот урок
+            var existingBooking = await _context.Bookings
+                .FirstOrDefaultAsync(b => b.LessonId == id && b.StudentId == student.Id);
+
+            if (existingBooking != null)
+            {
+                TempData["Error"] = "Вы уже записаны на этот урок";
+                return RedirectToAction(nameof(Search));
+            }
+
+            try
+            {
+                // Создаем новую запись
+                var booking = new Booking
+                {
+                    LessonId = id,
+                    StudentId = student.Id,
+                    StatusId = 1 // Предполагаем, что 1 - это ID статуса "Ожидает подтверждения"
+                };
+
+                _context.Bookings.Add(booking);
+                await _context.SaveChangesAsync();
+
+                TempData["Success"] = "Вы успешно записались на урок";
+                return RedirectToAction(nameof(Search));
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Ошибка при записи на урок: " + ex.Message;
+                return RedirectToAction(nameof(Search));
+            }
+        }
+
+        [Authorize(Roles = "Ученик")]
+        public async Task<IActionResult> MyBookings()
+        {
+            var studentEmail = User.FindFirstValue(ClaimTypes.Email);
+            var student = await _context.Users.FirstOrDefaultAsync(u => u.Email == studentEmail);
+            
+            if (student == null)
+            {
+                return NotFound("Ученик не найден");
+            }
+
+            var bookings = await _context.Bookings
+                .Include(b => b.Lesson)
+                    .ThenInclude(l => l.Subject)
+                .Include(b => b.Lesson)
+                    .ThenInclude(l => l.Tutor)
+                .Include(b => b.Status)
+                .Where(b => b.StudentId == student.Id)
+                .OrderByDescending(b => b.Lesson.StartTime)
+                .ToListAsync();
+
+            return View(bookings);
+        }
+
+        [Authorize(Roles = "Ученик")]
+        [HttpPost]
+        public async Task<IActionResult> CancelBooking(int id)
+        {
+            var studentEmail = User.FindFirstValue(ClaimTypes.Email);
+            var student = await _context.Users.FirstOrDefaultAsync(u => u.Email == studentEmail);
+            
+            if (student == null)
+            {
+                return NotFound("Ученик не найден");
+            }
+
+            var booking = await _context.Bookings
+                .Include(b => b.Lesson)
+                .FirstOrDefaultAsync(b => b.Id == id && b.StudentId == student.Id);
+
+            if (booking == null)
+            {
+                return NotFound("Запись не найдена");
+            }
+
+            // Проверяем, не прошел ли уже урок
+            if (booking.Lesson.StartTime < DateTime.Now)
+            {
+                TempData["Error"] = "Нельзя отменить запись на прошедший урок";
+                return RedirectToAction(nameof(MyBookings));
+            }
+
+            try
+            {
+                _context.Bookings.Remove(booking);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Запись успешно отменена";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Ошибка при отмене записи: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(MyBookings));
+        }
     }
 } 

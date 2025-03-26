@@ -206,8 +206,28 @@
     </style>
 }
 
-<div class="container">
-    <h1 class="page-title">Поиск уроков</h1>
+<div class="container mt-4">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Доступные уроки</h2>
+        </div>
+    </div>
 
     <form asp-action="Search" method="get" class="search-form">
         <div class="row g-3">
@@ -301,11 +321,21 @@
                             </div>
                         </div>
                         <div class="lesson-footer">
-                            <form asp-action="SignUp" asp-route-id="@lesson.Id" method="post">
-                                <button type="submit" class="btn btn-signup">
-                                    <i class="fas fa-check-circle"></i> Записаться
-                                </button>
-                            </form>
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Ученик"))
+                            {
+                                <form asp-action="SignUp" asp-route-id="@lesson.Id" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-calendar-check me-2"></i>Записаться
+                                    </button>
+                                </form>
+                            }
+                            else if (!User.Identity.IsAuthenticated)
+                            {
+                                <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Войти для записи
+                                </a>
+                            }
                         </div>
                     </div>
                 </div>
