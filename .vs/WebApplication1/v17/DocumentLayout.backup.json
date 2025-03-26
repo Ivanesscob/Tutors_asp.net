@@ -45,6 +45,10 @@
           "SelectedChildIndex": 3,
           "Children": [
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "MyLessons.cshtml",
@@ -54,12 +58,7 @@
               "RelativeToolTip": "WebApplication1\\Views\\Lessons\\MyLessons.cshtml",
               "ViewState": "AgIAAM0AAAAAAAAAAAArwNYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-26T19:49:59.831Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+              "WhenOpened": "2025-03-26T19:49:59.831Z"
             },
             {
               "$type": "Document",
@@ -71,8 +70,7 @@
               "RelativeToolTip": "WebApplication1\\Views\\Home\\Index.cshtml",
               "ViewState": "AgIAAAYAAAAAAAAAAAAQwAYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-26T19:43:48.243Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-26T19:43:48.243Z"
             },
             {
               "$type": "Document",
@@ -82,7 +80,7 @@
               "RelativeDocumentMoniker": "WebApplication1\\Controllers\\LessonsController.cs",
               "ToolTip": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Controllers\\LessonsController.cs",
               "RelativeToolTip": "WebApplication1\\Controllers\\LessonsController.cs",
-              "ViewState": "AgIAAH8AAAAAAAAAAAAnwIwAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAIAAAAAAAAAAAAAnwI0AAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-26T19:20:59.354Z",
               "EditorCaption": ""

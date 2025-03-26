@@ -9,7 +9,6 @@ using System.Collections.Generic;
 
 namespace WebApplication1.Controllers
 {
-    [Authorize(Roles = "Учитель")]
     public class LessonsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,6 +19,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Lessons/Create
+        [Authorize(Roles = "Учитель")]
         public IActionResult Create()
         {
             var subjects = _context.Subjects.ToList();
@@ -30,6 +30,7 @@ namespace WebApplication1.Controllers
         // POST: Lessons/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Учитель")]
         public async Task<IActionResult> Create(string title, string description, decimal price, DateTime startTime, DateTime endTime, int subjectId)
         {
             // Проверяем, существует ли урок с таким названием
@@ -163,6 +164,61 @@ namespace WebApplication1.Controllers
 
             TempData["Success"] = "Урок успешно удален";
             return RedirectToAction(nameof(MyLessons));
+        }
+
+        [Authorize(Roles = "Ученик")]
+        public async Task<IActionResult> Search(string searchString, int? subjectId, string sortOrder)
+        {
+            var query = _context.Lessons
+                .Include(l => l.Subject)
+                .Include(l => l.Tutor)
+                .Where(l => l.StartTime >= DateTime.Now)
+                .AsQueryable();
+
+            // Фильтрация по поисковой строке
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(l => 
+                    l.Title.Contains(searchString) || 
+                    l.Description.Contains(searchString) ||
+                    l.Subject.Name.Contains(searchString) ||
+                    (l.Tutor.FirstName + " " + l.Tutor.LastName).Contains(searchString)
+                );
+            }
+
+            // Фильтрация по предмету
+            if (subjectId.HasValue)
+            {
+                query = query.Where(l => l.SubjectId == subjectId.Value);
+            }
+
+            // Сортировка
+            switch (sortOrder)
+            {
+                case "date_desc":
+                    query = query.OrderByDescending(l => l.StartTime);
+                    break;
+                case "price_asc":
+                    query = query.OrderBy(l => l.Price);
+                    break;
+                case "price_desc":
+                    query = query.OrderByDescending(l => l.Price);
+                    break;
+                default:
+                    query = query.OrderBy(l => l.StartTime);
+                    break;
+            }
+
+            var lessons = await query.ToListAsync();
+            var subjects = await _context.Subjects.OrderBy(s => s.Name).ToListAsync();
+
+            ViewBag.SearchString = searchString;
+            ViewBag.SubjectId = subjectId;
+            ViewBag.SortOrder = sortOrder;
+            ViewBag.Subjects = new SelectList(subjects, "Id", "Name");
+            ViewBag.CurrentSort = sortOrder;
+
+            return View(lessons);
         }
     }
 } 

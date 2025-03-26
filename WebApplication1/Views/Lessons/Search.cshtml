@@ -1,0 +1,315 @@
+@model IEnumerable<WebApplication1.Models.Lesson>
+
+@{
+    ViewData["Title"] = "Поиск уроков";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .search-form {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .search-form .form-control {
+            border-radius: 25px;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #e9ecef;
+        }
+
+        .search-form .form-control:focus {
+            border-color: #6B73FF;
+            box-shadow: 0 0 0 0.2rem rgba(107, 115, 255, 0.25);
+        }
+
+        .search-form select {
+            border-radius: 25px;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #e9ecef;
+        }
+
+        .search-form .btn-search {
+            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 0.8rem 2rem;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .search-form .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(107, 115, 255, 0.3);
+            color: white;
+        }
+
+        .sort-buttons {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .sort-btn {
+            background: #f8f9fa;
+            border: 2px solid #6B73FF;
+            border-radius: 25px;
+            padding: 0.5rem 1.5rem;
+            color: #6B73FF;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .sort-btn:hover {
+            background: #6B73FF;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .sort-btn.active {
+            background: #6B73FF;
+            color: white;
+        }
+
+        .lesson-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 2rem;
+            height: 100%;
+            position: relative;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .lesson-header {
+            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+            color: white;
+            padding: 1.5rem;
+            position: relative;
+            min-height: 120px;
+        }
+
+        .lesson-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .lesson-price {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .lesson-body {
+            padding: 2rem;
+        }
+
+        .lesson-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .lesson-info i {
+            width: 25px;
+            color: #6B73FF;
+            margin-right: 10px;
+        }
+
+        .lesson-description {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .lesson-footer {
+            background: transparent;
+            border-top: 1px solid #eee;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-signup {
+            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(107, 115, 255, 0.3);
+            color: white;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+            border-radius: 3px;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 3rem;
+            background: #f8f9fa;
+            border-radius: 15px;
+            color: #666;
+        }
+
+        .empty-message i {
+            font-size: 3rem;
+            color: #6B73FF;
+            margin-bottom: 1rem;
+        }
+    </style>
+}
+
+<div class="container">
+    <h1 class="page-title">Поиск уроков</h1>
+
+    <form asp-action="Search" method="get" class="search-form">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <input type="text" name="searchString" class="form-control" 
+                       placeholder="Поиск по названию, описанию или учителю" 
+                       value="@ViewBag.SearchString">
+            </div>
+            <div class="col-md-4">
+                <select name="subjectId" class="form-select">
+                    <option value="">Все предметы</option>
+                    @foreach (var item in ViewBag.Subjects)
+                    {
+                        <option value="@item.Value" selected="@(ViewBag.SubjectId?.ToString() == item.Value)">
+                            @item.Text
+                        </option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-search w-100">
+                    <i class="fas fa-search"></i> Поиск
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <div class="sort-buttons">
+        <a asp-action="Search" asp-route-searchString="@ViewBag.SearchString" 
+           asp-route-subjectId="@ViewBag.SubjectId" asp-route-sortOrder=""
+           class="sort-btn @(string.IsNullOrEmpty(ViewBag.CurrentSort) ? "active" : "")">
+            <i class="fas fa-calendar"></i> По дате (сначала ближайшие)
+        </a>
+        <a asp-action="Search" asp-route-searchString="@ViewBag.SearchString" 
+           asp-route-subjectId="@ViewBag.SubjectId" asp-route-sortOrder="date_desc"
+           class="sort-btn @(ViewBag.CurrentSort == "date_desc" ? "active" : "")">
+            <i class="fas fa-calendar-alt"></i> По дате (сначала дальние)
+        </a>
+        <a asp-action="Search" asp-route-searchString="@ViewBag.SearchString" 
+           asp-route-subjectId="@ViewBag.SubjectId" asp-route-sortOrder="price_asc"
+           class="sort-btn @(ViewBag.CurrentSort == "price_asc" ? "active" : "")">
+            <i class="fas fa-sort-amount-down"></i> По цене (возрастание)
+        </a>
+        <a asp-action="Search" asp-route-searchString="@ViewBag.SearchString" 
+           asp-route-subjectId="@ViewBag.SubjectId" asp-route-sortOrder="price_desc"
+           class="sort-btn @(ViewBag.CurrentSort == "price_desc" ? "active" : "")">
+            <i class="fas fa-sort-amount-up"></i> По цене (убывание)
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-message">
+            <i class="fas fa-search"></i>
+            <h3>Уроки не найдены</h3>
+            <p>Попробуйте изменить параметры поиска или проверьте позже.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var lesson in Model)
+            {
+                <div class="col-md-6">
+                    <div class="card lesson-card">
+                        <div class="lesson-header">
+                            <div class="lesson-price">
+                                <i class="fas fa-tag"></i> @lesson.Price ₽
+                            </div>
+                            <div class="lesson-title">@lesson.Title</div>
+                        </div>
+                        <div class="lesson-body">
+                            <div class="lesson-info">
+                                <i class="fas fa-book"></i>
+                                <span>@lesson.Subject.Name</span>
+                            </div>
+                            <div class="lesson-info">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                <span>@lesson.Tutor.FirstName @lesson.Tutor.LastName</span>
+                            </div>
+                            <div class="lesson-info">
+                                <i class="fas fa-clock"></i>
+                                <span>@lesson.DurationMinutes минут</span>
+                            </div>
+                            <div class="lesson-info">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>@lesson.StartTime.ToString("dd.MM.yyyy HH:mm") - @lesson.EndTime.ToString("HH:mm")</span>
+                            </div>
+                            <div class="lesson-description">
+                                @lesson.Description
+                            </div>
+                        </div>
+                        <div class="lesson-footer">
+                            <form asp-action="SignUp" asp-route-id="@lesson.Id" method="post">
+                                <button type="submit" class="btn btn-signup">
+                                    <i class="fas fa-check-circle"></i> Записаться
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div> 
