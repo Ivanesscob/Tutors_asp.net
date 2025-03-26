@@ -358,5 +358,155 @@ namespace WebApplication1.Controllers
 
             return RedirectToAction(nameof(MyBookings));
         }
+
+        [Authorize(Roles = "Админ")]
+        public async Task<IActionResult> AdminPanel()
+        {
+            // Получаем все уроки с информацией о предмете и учителе
+            var lessons = await _context.Lessons
+                .Include(l => l.Subject)
+                .Include(l => l.Tutor)
+                .OrderByDescending(l => l.StartTime)
+                .ToListAsync();
+
+            // Получаем все бронирования с информацией об уроке, ученике и статусе
+            var bookings = await _context.Bookings
+                .Include(b => b.Lesson)
+                    .ThenInclude(l => l.Subject)
+                .Include(b => b.Lesson)
+                    .ThenInclude(l => l.Tutor)
+                .Include(b => b.Student)
+                .Include(b => b.Status)
+                .OrderByDescending(b => b.Lesson.StartTime)
+                .ToListAsync();
+
+            // Получаем все роли и предметы
+            var roles = await _context.UserRoles.ToListAsync();
+            var subjects = await _context.Subjects.ToListAsync();
+
+            // Получаем статистику
+            var totalLessons = lessons.Count;
+            var totalBookings = bookings.Count;
+            var activeBookings = bookings.Count(b => b.Lesson.StartTime >= DateTime.Now);
+            var totalTeachers = await _context.Users.CountAsync(u => u.Role.Name == "Учитель");
+            var totalStudents = await _context.Users.CountAsync(u => u.Role.Name == "Ученик");
+
+            ViewBag.TotalLessons = totalLessons;
+            ViewBag.TotalBookings = totalBookings;
+            ViewBag.ActiveBookings = activeBookings;
+            ViewBag.TotalTeachers = totalTeachers;
+            ViewBag.TotalStudents = totalStudents;
+            ViewBag.Roles = roles;
+            ViewBag.Subjects = subjects;
+
+            return View((lessons, bookings));
+        }
+
+        [Authorize(Roles = "Админ")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteLesson(int id)
+        {
+            var lesson = await _context.Lessons
+                .Include(l => l.Bookings)
+                .FirstOrDefaultAsync(l => l.Id == id);
+
+            if (lesson == null)
+            {
+                return NotFound("Урок не найден");
+            }
+
+            try
+            {
+                // Удаляем все связанные бронирования
+                _context.Bookings.RemoveRange(lesson.Bookings);
+                // Удаляем сам урок
+                _context.Lessons.Remove(lesson);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Урок успешно удален";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Ошибка при удалении урока: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(AdminPanel));
+        }
+
+        [Authorize(Roles = "Админ")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteBooking(int id)
+        {
+            var booking = await _context.Bookings
+                .Include(b => b.Lesson)
+                .FirstOrDefaultAsync(b => b.Id == id);
+
+            if (booking == null)
+            {
+                return NotFound("Запись не найдена");
+            }
+
+            try
+            {
+                _context.Bookings.Remove(booking);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Запись успешно удалена";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Ошибка при удалении записи: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(AdminPanel));
+        }
+
+        [Authorize(Roles = "Админ")]
+        [HttpPost]
+        public async Task<IActionResult> AddRole(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                TempData["Error"] = "Название роли не может быть пустым";
+                return RedirectToAction(nameof(AdminPanel));
+            }
+
+            try
+            {
+                var role = new UserRole { Name = name };
+                _context.UserRoles.Add(role);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Роль успешно добавлена";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Ошибка при добавлении роли: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(AdminPanel));
+        }
+
+        [Authorize(Roles = "Админ")]
+        [HttpPost]
+        public async Task<IActionResult> AddSubject(string name, string description)
+        {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(description))
+            {
+                TempData["Error"] = "Название и описание предмета не могут быть пустыми";
+                return RedirectToAction(nameof(AdminPanel));
+            }
+
+            try
+            {
+                var subject = new Subject { Name = name, Description = description };
+                _context.Subjects.Add(subject);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Предмет успешно добавлен";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Ошибка при добавлении предмета: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(AdminPanel));
+        }
     }
 } 

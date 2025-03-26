@@ -24,7 +24,13 @@
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {
-                            @if (User.IsInRole("Учитель"))
+                            @if (User.IsInRole("Админ"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Lessons" asp-action="AdminPanel">Панель администратора</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Учитель"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-controller="Lessons" asp-action="Create">Создать урок</a>

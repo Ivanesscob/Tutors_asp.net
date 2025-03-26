@@ -24,9 +24,9 @@ namespace WebApplication1.Data
             // Настраиваем отношения для Booking
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.Lesson)
-                .WithMany()
+                .WithMany(l => l.Bookings)
                 .HasForeignKey(b => b.LessonId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.Student)

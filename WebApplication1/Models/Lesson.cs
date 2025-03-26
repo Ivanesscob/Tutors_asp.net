@@ -36,5 +36,7 @@ namespace WebApplication1.Models
         // Навигационные свойства
         public Subject Subject { get; set; }
         public User Tutor { get; set; }
+
+        public virtual ICollection<Booking> Bookings { get; set; }
     }
 } 
