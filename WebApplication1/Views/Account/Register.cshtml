@@ -4,60 +4,58 @@
     ViewData["Title"] = "Регистрация";
 }
 
-<div class="container">
+<div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body p-5">
-                    <h2 class="text-center mb-4">@ViewData["Title"]</h2>
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center">Регистрация</h2>
+                </div>
+                <div class="card-body">
                     <form asp-action="Register" method="post">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        
-                        <div class="form-floating mb-3">
-                            <input asp-for="FirstName" class="form-control" placeholder="Имя" />
-                            <label asp-for="FirstName"></label>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="FirstName" class="control-label">Имя</label>
+                            <input asp-for="FirstName" class="form-control" />
                             <span asp-validation-for="FirstName" class="text-danger"></span>
                         </div>
 
-                        <div class="form-floating mb-3">
-                            <input asp-for="LastName" class="form-control" placeholder="Фамилия" />
-                            <label asp-for="LastName"></label>
+                        <div class="form-group mb-3">
+                            <label asp-for="LastName" class="control-label">Фамилия</label>
+                            <input asp-for="LastName" class="form-control" />
                             <span asp-validation-for="LastName" class="text-danger"></span>
                         </div>
 
-                        <div class="form-floating mb-3">
-                            <input asp-for="Email" class="form-control" placeholder="name@example.com" />
-                            <label asp-for="Email"></label>
+                        <div class="form-group mb-3">
+                            <label asp-for="Email" class="control-label">Email</label>
+                            <input asp-for="Email" class="form-control" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
 
                         <div class="form-group mb-3">
                             <label asp-for="Password" class="control-label">Пароль</label>
-                            <input asp-for="Password" class="form-control" autocomplete="off" />
+                            <input asp-for="Password" class="form-control" />
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label asp-for="ConfirmPassword" class="control-label">Подтверждение пароля</label>
-                            <input asp-for="ConfirmPassword" class="form-control" autocomplete="off" />
-                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <select asp-for="RoleId" class="form-select" asp-items="@(new SelectList(ViewBag.Roles, "Id", "Name"))">
+                            <label asp-for="RoleId" class="control-label">Роль</label>
+                            <select asp-for="RoleId" class="form-control">
                                 <option value="">Выберите роль</option>
+                                @foreach (var role in ViewBag.Roles)
+                                {
+                                    <option value="@role.Id">@role.Name</option>
+                                }
                             </select>
-                            <label asp-for="RoleId"></label>
                             <span asp-validation-for="RoleId" class="text-danger"></span>
                         </div>
 
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">Зарегистрироваться</button>
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                            <a asp-action="Login" class="btn btn-link">Уже есть аккаунт? Войти</a>
                         </div>
                     </form>
-                    <div class="text-center mt-3">
-                        <p>Уже есть аккаунт? <a asp-action="Login" class="text-decoration-none">Войти</a></p>
-                    </div>
                 </div>
             </div>
         </div>

@@ -6,6 +6,7 @@ using System.Security.Claims;
 using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace WebApplication1.Controllers
 {
@@ -21,7 +22,9 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            var roles = _context.UserRoles.ToList();
+            var roles = _context.UserRoles
+                .Where(r => r.Name != "Админ")
+                .ToList();
             ViewBag.Roles = roles;
             return View();
         }

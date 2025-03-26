@@ -1,0 +1,190 @@
+@model IEnumerable<WebApplication1.Models.Booking>
+
+@{
+    ViewData["Title"] = "Управление записями";
+}
+
+@section Styles {
+    <style>
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            display: inline-block;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .booking-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .booking-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .booking-header {
+            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .booking-body {
+            padding: 1.5rem;
+        }
+
+        .booking-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+
+        .booking-info i {
+            width: 25px;
+            color: #6B73FF;
+            margin-right: 10px;
+        }
+
+        .booking-footer {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0 0 10px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-action {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-confirm {
+            background: #28a745;
+            color: white;
+            border: none;
+        }
+
+        .btn-confirm:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-cancel {
+            background: #dc3545;
+            color: white;
+            border: none;
+        }
+
+        .btn-cancel:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .btn-complete {
+            background: #6c757d;
+            color: white;
+            border: none;
+        }
+
+        .btn-complete:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-complete:disabled {
+            background: #6c757d;
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+        }
+    </style>
+}
+
+<div class="container mt-4">
+    <h2>Управление записями</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Нет доступных записей.
+        </div>
+    }
+    else
+    {
+        @foreach (var booking in Model)
+        {
+            <div class="card booking-card">
+                <div class="booking-header">
+                    <h5 class="mb-0">Запись на урок: @booking.Lesson.Title</h5>
+                </div>
+                <div class="booking-body">
+                    <div class="booking-info">
+                        <i class="fas fa-user"></i>
+                        <span>Ученик: @booking.Student.FirstName @booking.Student.LastName</span>
+                    </div>
+                    <div class="booking-info">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>Учитель: @booking.Lesson.Tutor.FirstName @booking.Lesson.Tutor.LastName</span>
+                    </div>
+                    <div class="booking-info">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Дата: @booking.Lesson.StartTime.ToString("dd.MM.yyyy HH:mm")</span>
+                    </div>
+                    <div class="booking-info">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Статус: <span class="status-badge @(booking.Status.Name switch {
+                            "Ожидается" => "status-pending",
+                            "Завершен" => "status-completed",
+                            _ => ""
+                        })">@booking.Status.Name</span></span>
+                    </div>
+                </div>
+                <div class="booking-footer">
+                    @if (booking.Status.Name == "Ожидается")
+                    {
+                        <div>
+                            <form asp-action="Confirm" asp-route-id="@booking.Id" method="post" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-action btn-confirm">
+                                    <i class="fas fa-check"></i> Подтвердить
+                                </button>
+                            </form>
+                            <form asp-action="Cancel" asp-route-id="@booking.Id" method="post" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-action btn-cancel">
+                                    <i class="fas fa-times"></i> Отменить
+                                </button>
+                            </form>
+                        </div>
+                    }
+                    @if (booking.Status.Name == "Подтверждено")
+                    {
+                        <form asp-action="Complete" asp-route-id="@booking.Id" method="post" style="display: inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-action btn-complete">
+                                <i class="fas fa-check-double"></i> Завершить
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+        }
+    }
+</div> 
