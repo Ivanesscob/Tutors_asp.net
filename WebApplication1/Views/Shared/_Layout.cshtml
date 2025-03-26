@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - Каталог репетиторов</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <header>
@@ -77,7 +78,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - Каталог репетиторов - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - Каталог репетиторов
         </div>
     </footer>
 

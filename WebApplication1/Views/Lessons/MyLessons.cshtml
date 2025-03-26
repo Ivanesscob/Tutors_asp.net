@@ -1,7 +1,7 @@
-﻿@model IEnumerable<WebApplication1.Models.Lesson>
+@model IEnumerable<WebApplication1.Models.Lesson>
 
 @{
-    ViewData["Title"] = "Главная";
+    ViewData["Title"] = "Мои уроки";
 }
 
 @section Styles {
@@ -80,11 +80,17 @@
             border-top: 1px solid #eee;
             padding: 1rem 2rem;
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .btn-signup {
-            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+        .students-count {
+            color: #6B73FF;
+            font-weight: 500;
+        }
+
+        .btn-delete {
+            background: #dc3545;
             border: none;
             padding: 0.8rem 2rem;
             border-radius: 25px;
@@ -93,26 +99,18 @@
             transition: all 0.3s ease;
         }
 
-        .btn-signup:hover {
+        .btn-delete:hover {
+            background: #c82333;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(107, 115, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
             color: white;
         }
 
-        .btn-login {
-            background: #f8f9fa;
-            border: 2px solid #6B73FF;
-            padding: 0.8rem 2rem;
-            border-radius: 25px;
-            color: #6B73FF;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn-login:hover {
-            background: #6B73FF;
-            color: white;
-            transform: translateY(-2px);
+        .btn-delete:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
         .page-title {
@@ -150,18 +148,42 @@
             color: #6B73FF;
             margin-bottom: 1rem;
         }
+
+        .alert {
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
     </style>
 }
 
 <div class="container">
-    <h1 class="page-title">Доступные уроки</h1>
+    <h1 class="page-title">Мои уроки</h1>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 
     @if (!Model.Any())
     {
         <div class="empty-message">
             <i class="fas fa-calendar-times"></i>
-            <h3>Пока нет доступных уроков</h3>
-            <p>Проверьте позже или создайте свой урок, если вы учитель.</p>
+            <h3>У вас пока нет созданных уроков</h3>
+            <p>Создайте свой первый урок, чтобы начать преподавать!</p>
+            <a asp-action="Create" class="btn btn-primary mt-3">
+                <i class="fas fa-plus"></i> Создать урок
+            </a>
         </div>
     }
     else
@@ -183,10 +205,6 @@
                                 <span>@lesson.Subject.Name</span>
                             </div>
                             <div class="lesson-info">
-                                <i class="fas fa-chalkboard-teacher"></i>
-                                <span>@lesson.Tutor.FirstName @lesson.Tutor.LastName</span>
-                            </div>
-                            <div class="lesson-info">
                                 <i class="fas fa-clock"></i>
                                 <span>@lesson.DurationMinutes минут</span>
                             </div>
@@ -199,24 +217,20 @@
                             </div>
                         </div>
                         <div class="lesson-footer">
-                            @if (User.Identity.IsAuthenticated && User.IsInRole("Ученик"))
-                            {
-                                <form asp-controller="Lessons" asp-action="SignUp" asp-route-id="@lesson.Id" method="post">
-                                    <button type="submit" class="btn btn-signup">
-                                        <i class="fas fa-check-circle"></i> Записаться
-                                    </button>
-                                </form>
-                            }
-                            else if (!User.Identity.IsAuthenticated)
-                            {
-                                <a asp-controller="Account" asp-action="Login" class="btn btn-login">
-                                    <i class="fas fa-sign-in-alt"></i> Войти для записи
-                                </a>
-                            }
+                            <div class="students-count">
+                                <i class="fas fa-user-graduate"></i> @ViewBag.BookingsCount[lesson.Id] учеников
+                            </div>
+                            <form asp-action="Delete" asp-route-id="@lesson.Id" method="post" 
+                                  onsubmit="return confirm('Вы уверены, что хотите удалить этот урок?');">
+                                <button type="submit" class="btn btn-delete" 
+                                        @(ViewBag.BookingsCount[lesson.Id] > 0 ? "disabled" : "")>
+                                    <i class="fas fa-trash"></i> Удалить
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
             }
         </div>
     }
-</div>
+</div> 

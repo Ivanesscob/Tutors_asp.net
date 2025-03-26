@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.Models
 {
@@ -7,41 +8,33 @@ namespace WebApplication1.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Название урока обязательно")]
-        [Display(Name = "Название")]
+        [StringLength(100, ErrorMessage = "Название урока не должно превышать 100 символов")]
         public string Title { get; set; }
 
-        [Required(ErrorMessage = "Описание обязательно")]
-        [Display(Name = "Описание")]
+        [Required(ErrorMessage = "Описание урока обязательно")]
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "Цена обязательна")]
-        [Display(Name = "Цена")]
+        [Required(ErrorMessage = "Цена урока обязательна")]
+        [Range(0, 10000, ErrorMessage = "Цена должна быть от 0 до 10000 рублей")]
         public decimal Price { get; set; }
 
-        [Required(ErrorMessage = "Длительность обязательна")]
-        [Display(Name = "Длительность (минут)")]
-        public int DurationMinutes { get; set; }
-
-        [Required(ErrorMessage = "Начало урока обязательно")]
-        [Display(Name = "Начало урока")]
-        [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
+        [Required(ErrorMessage = "Время начала урока обязательно")]
         public DateTime StartTime { get; set; }
 
-        [Required(ErrorMessage = "Конец урока обязателен")]
-        [Display(Name = "Конец урока")]
-        [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
+        [Required(ErrorMessage = "Время окончания урока обязательно")]
         public DateTime EndTime { get; set; }
 
-        [Required(ErrorMessage = "Репетитор обязателен")]
-        [Display(Name = "Репетитор")]
-        public int TutorId { get; set; }
-        public virtual User Tutor { get; set; }
+        [Required(ErrorMessage = "Длительность урока обязательна")]
+        public int DurationMinutes { get; set; }
 
         [Required(ErrorMessage = "Предмет обязателен")]
-        [Display(Name = "Предмет")]
         public int SubjectId { get; set; }
-        public virtual Subject Subject { get; set; }
+
+        [Required(ErrorMessage = "Учитель обязателен")]
+        public int TutorId { get; set; }
+
+        // Навигационные свойства
+        public Subject Subject { get; set; }
+        public User Tutor { get; set; }
     }
 } 

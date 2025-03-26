@@ -5,6 +5,7 @@ using WebApplication1.Data;
 using WebApplication1.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace WebApplication1.Controllers
 {
@@ -96,6 +97,72 @@ namespace WebApplication1.Controllers
 
             ViewBag.Subjects = new SelectList(_context.Subjects, "Id", "Name");
             return View();
+        }
+
+        [Authorize(Roles = "Учитель")]
+        public async Task<IActionResult> MyLessons()
+        {
+            var teacherEmail = User.FindFirstValue(ClaimTypes.Email);
+            var teacher = await _context.Users.FirstOrDefaultAsync(u => u.Email == teacherEmail);
+            
+            if (teacher == null)
+            {
+                return NotFound("Учитель не найден");
+            }
+
+            var lessons = await _context.Lessons
+                .Include(l => l.Subject)
+                .Include(l => l.Tutor)
+                .Where(l => l.TutorId == teacher.Id)
+                .OrderByDescending(l => l.StartTime)
+                .ToListAsync();
+
+            // Получаем количество бронирований для каждого урока
+            var bookingsCount = new Dictionary<int, int>();
+            foreach (var lesson in lessons)
+            {
+                var count = await _context.Bookings
+                    .CountAsync(b => b.LessonId == lesson.Id);
+                bookingsCount[lesson.Id] = count;
+            }
+
+            ViewBag.BookingsCount = bookingsCount;
+            return View(lessons);
+        }
+
+        [Authorize(Roles = "Учитель")]
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var lesson = await _context.Lessons
+                .FirstOrDefaultAsync(l => l.Id == id);
+
+            if (lesson == null)
+            {
+                return NotFound("Урок не найден");
+            }
+
+            var teacherEmail = User.FindFirstValue(ClaimTypes.Email);
+            var teacher = await _context.Users.FirstOrDefaultAsync(u => u.Email == teacherEmail);
+
+            if (lesson.TutorId != teacher.Id)
+            {
+                return Forbid("Вы не можете удалить чужой урок");
+            }
+
+            // Проверяем наличие бронирований
+            var hasBookings = await _context.Bookings.AnyAsync(b => b.LessonId == id);
+            if (hasBookings)
+            {
+                TempData["Error"] = "Нельзя удалить урок, на который уже записались ученики";
+                return RedirectToAction(nameof(MyLessons));
+            }
+
+            _context.Lessons.Remove(lesson);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Урок успешно удален";
+            return RedirectToAction(nameof(MyLessons));
         }
     }
 } 

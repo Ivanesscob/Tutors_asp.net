@@ -7,24 +7,32 @@
       "RelativeMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\lessonscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|c:\\codeprojects\\c#\\webapplication1\\webapplication1\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|c:\\codeprojects\\c#\\webapplication1\\webapplication1\\views\\lessons\\mylessons.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\views\\lessons\\mylessons.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Migrations\\20250326164703_dasd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WebApplication1\\Migrations\\20250326164703_dasd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|c:\\codeprojects\\c#\\webapplication1\\webapplication1\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|c:\\codeprojects\\c#\\webapplication1\\webapplication1\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|c:\\codeprojects\\c#\\webapplication1\\webapplication1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Migrations\\20250326162421_das.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WebApplication1\\Migrations\\20250326162421_das.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Migrations\\20250326162115_das.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WebApplication1\\Migrations\\20250326162115_das.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|c:\\codeprojects\\c#\\webapplication1\\webapplication1\\migrations\\20250326164703_dasd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\migrations\\20250326164703_dasd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|c:\\codeprojects\\c#\\webapplication1\\webapplication1\\migrations\\20250326162421_das.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\migrations\\20250326162421_das.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,11 +42,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MyLessons.cshtml",
+              "DocumentMoniker": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Views\\Lessons\\MyLessons.cshtml",
+              "RelativeDocumentMoniker": "WebApplication1\\Views\\Lessons\\MyLessons.cshtml",
+              "ToolTip": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Views\\Lessons\\MyLessons.cshtml",
+              "RelativeToolTip": "WebApplication1\\Views\\Lessons\\MyLessons.cshtml",
+              "ViewState": "AgIAAM0AAAAAAAAAAAArwNYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-26T19:49:59.831Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "WebApplication1\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "WebApplication1\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAQwAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-26T19:43:48.243Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -48,14 +82,14 @@
               "RelativeDocumentMoniker": "WebApplication1\\Controllers\\LessonsController.cs",
               "ToolTip": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Controllers\\LessonsController.cs",
               "RelativeToolTip": "WebApplication1\\Controllers\\LessonsController.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAWwBkAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAAH8AAAAAAAAAAAAnwIwAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-26T19:20:59.354Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Data\\ApplicationDbContext.cs",
@@ -63,12 +97,11 @@
               "RelativeToolTip": "WebApplication1\\Data\\ApplicationDbContext.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-26T19:14:55.01Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-26T19:14:55.01Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "20250326164703_dasd.cs",
               "DocumentMoniker": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Migrations\\20250326164703_dasd.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Migrations\\20250326164703_dasd.cs",
@@ -76,12 +109,11 @@
               "RelativeToolTip": "WebApplication1\\Migrations\\20250326164703_dasd.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-26T16:47:03.222Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-26T16:47:03.222Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\appsettings.json",
               "RelativeDocumentMoniker": "WebApplication1\\appsettings.json",
@@ -89,12 +121,11 @@
               "RelativeToolTip": "WebApplication1\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-03-26T16:36:22.33Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-26T16:36:22.33Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "20250326162421_das.cs",
               "DocumentMoniker": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Migrations\\20250326162421_das.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Migrations\\20250326162421_das.cs",
@@ -102,8 +133,7 @@
               "RelativeToolTip": "WebApplication1\\Migrations\\20250326162421_das.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-26T16:24:21.424Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-26T16:24:21.424Z"
             },
             {
               "$type": "Document",
@@ -115,8 +145,7 @@
               "RelativeToolTip": "WebApplication1\\Migrations\\20250326162115_das.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-26T16:21:15.828Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-26T16:21:15.828Z"
             }
           ]
         }
