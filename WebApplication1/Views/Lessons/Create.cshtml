@@ -77,46 +77,53 @@
         <div class="col-md-8">
             <div class="create-form">
                 <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                     <div class="mb-3">
-                        <label for="title" class="form-label">Название урока</label>
-                        <input type="text" class="form-control" id="title" name="title" required>
+                        <label asp-for="Title" class="form-label">Название урока</label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label for="description" class="form-label">Описание</label>
-                        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                        <label asp-for="Description" class="form-label">Описание</label>
+                        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label for="price" class="form-label">Цена (₽)</label>
-                        <input type="number" class="form-control" id="price" name="price" min="0" step="0.01" required>
+                        <label asp-for="Price" class="form-label">Цена (₽)</label>
+                        <input asp-for="Price" class="form-control" type="number" min="0" step="0.01" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="subjectId" class="form-label">Предмет</label>
-                        <select class="form-select" id="subjectId" name="subjectId" required>
+                    <div class="form-group mb-3">
+                        <label asp-for="SubjectId" class="form-label">Предмет</label>
+                        <select asp-for="SubjectId" class="form-control" asp-items="ViewBag.Subjects">
                             <option value="">Выберите предмет</option>
-                            @foreach (var item in ViewBag.Subjects)
-                            {
-                                <option value="@item.Value">@item.Text</option>
-                            }
                         </select>
+                        <span asp-validation-for="SubjectId" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label for="startTime" class="form-label">Время начала</label>
-                        <input type="datetime-local" class="form-control" id="startTime" name="startTime" required>
+                        <label asp-for="StartTime" class="form-label">Время начала</label>
+                        <input asp-for="StartTime" class="form-control" type="datetime-local" />
+                        <span asp-validation-for="StartTime" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label for="endTime" class="form-label">Время окончания</label>
-                        <input type="datetime-local" class="form-control" id="endTime" name="endTime" required>
+                        <label asp-for="EndTime" class="form-label">Время окончания</label>
+                        <input asp-for="EndTime" class="form-control" type="datetime-local" />
+                        <span asp-validation-for="EndTime" class="text-danger"></span>
                     </div>
 
                     <div class="text-center">
                         <button type="submit" class="btn btn-create">
                             <i class="fas fa-plus"></i> Создать урок
                         </button>
+                        <a asp-action="MyLessons" class="btn btn-secondary ms-2">
+                            <i class="fas fa-arrow-left"></i> Назад
+                        </a>
                     </div>
                 </form>
             </div>
@@ -125,22 +132,23 @@
 </div>
 
 @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         // Устанавливаем минимальную дату на текущую
         var now = new Date();
         now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-        document.getElementById('startTime').min = now.toISOString().slice(0, 16);
-        document.getElementById('endTime').min = now.toISOString().slice(0, 16);
+        document.getElementById('StartTime').min = now.toISOString().slice(0, 16);
+        document.getElementById('EndTime').min = now.toISOString().slice(0, 16);
 
         // Обновляем минимальную дату окончания при изменении даты начала
-        document.getElementById('startTime').addEventListener('change', function() {
-            document.getElementById('endTime').min = this.value;
+        document.getElementById('StartTime').addEventListener('change', function() {
+            document.getElementById('EndTime').min = this.value;
         });
 
         // Валидация формы
         document.querySelector('form').addEventListener('submit', function(e) {
-            var startTime = new Date(document.getElementById('startTime').value);
-            var endTime = new Date(document.getElementById('endTime').value);
+            var startTime = new Date(document.getElementById('StartTime').value);
+            var endTime = new Date(document.getElementById('EndTime').value);
 
             if (endTime <= startTime) {
                 e.preventDefault();

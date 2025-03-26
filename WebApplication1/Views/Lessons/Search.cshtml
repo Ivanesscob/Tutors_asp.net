@@ -321,21 +321,15 @@
                             </div>
                         </div>
                         <div class="lesson-footer">
-                            @if (User.Identity.IsAuthenticated && User.IsInRole("Ученик"))
-                            {
-                                <form asp-action="SignUp" asp-route-id="@lesson.Id" method="post" class="d-inline">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn btn-primary w-100">
-                                        <i class="fas fa-calendar-check me-2"></i>Записаться
-                                    </button>
-                                </form>
-                            }
-                            else if (!User.Identity.IsAuthenticated)
-                            {
-                                <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary w-100">
-                                    <i class="fas fa-sign-in-alt me-2"></i>Войти для записи
-                                </a>
-                            }
+                            <div class="lesson-price">@lesson.Price ₽</div>
+                            <form asp-action="SignUp" asp-route-id="@lesson.Id" method="post" style="display: inline;">
+                                @{
+                                    var isBooked = ViewBag.UserBookings != null && ViewBag.UserBookings.Contains(lesson.Id);
+                                }
+                                <button type="submit" class="btn btn-primary" @(isBooked ? "disabled" : "")>
+                                    <i class="fas fa-calendar-check"></i> @(isBooked ? "Вы уже записаны" : "Записаться")
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

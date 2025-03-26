@@ -46,10 +46,8 @@
                 <div class="col-md-6">
                     <div class="card booking-card">
                         <div class="booking-header">
-                            <div class="booking-status @(booking.Status.Name == "Подтверждено" ? "status-confirmed" : 
-                                                    booking.Status.Name == "Отменено" ? "status-cancelled" : 
-                                                    "status-pending")">
-                                <i class="fas fa-circle"></i> @booking.Status.Name
+                            <div class="booking-status @(booking.Status.Name == "Завершен" ? "status-completed" : "status-pending")">
+                                <i class="fas fa-circle"></i> @(booking.Status.Name == "Завершен" ? "Завершен" : "Ожидается")
                             </div>
                             <div class="booking-title">@booking.Lesson.Title</div>
                         </div>
@@ -128,12 +126,7 @@
         color: white;
     }
 
-    .status-confirmed {
-        background-color: #28a745;
-        color: white;
-    }
-
-    .status-cancelled {
+    .status-completed {
         background-color: #dc3545;
         color: white;
     }

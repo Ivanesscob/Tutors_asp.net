@@ -8,109 +8,99 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .lesson-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 2rem;
-            height: 100%;
-            position: relative;
+            margin-bottom: 20px;
             border: none;
-            border-radius: 15px;
-            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
         }
 
         .lesson-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         .lesson-header {
             background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
             color: white;
-            padding: 1.5rem;
-            position: relative;
-            min-height: 120px;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .booking-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .status-pending {
+            background-color: #FFA500;
+            color: white;
+        }
+
+        .status-completed {
+            background-color: #dc3545;
+            color: white;
         }
 
         .lesson-title {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .lesson-price {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: 600;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .lesson-body {
-            padding: 2rem;
+            margin-bottom: 5px;
         }
 
         .lesson-info {
             display: flex;
             align-items: center;
-            margin-bottom: 1rem;
-            color: #666;
+            margin-bottom: 5px;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .lesson-info i {
-            width: 25px;
-            color: #6B73FF;
-            margin-right: 10px;
+            width: 20px;
+            margin-right: 5px;
+        }
+
+        .lesson-body {
+            padding: 15px;
         }
 
         .lesson-description {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-top: 1.5rem;
-            font-size: 0.95rem;
-            color: #555;
-            line-height: 1.6;
+            color: #666;
+            margin-bottom: 15px;
         }
 
         .lesson-footer {
-            background: transparent;
-            border-top: 1px solid #eee;
-            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 10px 15px;
+            background-color: #f8f9fa;
+            border-radius: 0 0 10px 10px;
         }
 
-        .students-count {
-            color: #6B73FF;
-            font-weight: 500;
+        .lesson-price {
+            font-weight: 600;
+            color: #28a745;
         }
 
         .btn-delete {
-            background: #dc3545;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 25px;
+            background-color: #dc3545;
             color: white;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
         }
 
         .btn-delete:hover {
-            background: #c82333;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
-            color: white;
+            background-color: #c82333;
         }
 
         .btn-delete:disabled {
-            background: #6c757d;
+            background-color: #6c757d;
             cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
         }
 
         .page-title {
@@ -153,6 +143,11 @@
             border-radius: 10px;
             margin-bottom: 2rem;
         }
+
+        .students-count {
+            color: #6B73FF;
+            font-weight: 500;
+        }
     </style>
 }
 
@@ -194,36 +189,25 @@
                 <div class="col-md-6">
                     <div class="card lesson-card">
                         <div class="lesson-header">
-                            <div class="lesson-price">
-                                <i class="fas fa-tag"></i> @lesson.Price ₽
+                            <div class="booking-status @(lesson.Bookings.Any() && lesson.Bookings.First().Status?.Name == "Завершен" ? "status-completed" : "status-pending")">
+                                <i class="fas fa-circle"></i> @(lesson.Bookings.Any() && lesson.Bookings.First().Status?.Name == "Завершен" ? "Завершен" : "Ожидается")
                             </div>
                             <div class="lesson-title">@lesson.Title</div>
+                            <div class="lesson-info">
+                                <i class="fas fa-book"></i> @lesson.Subject.Name
+                            </div>
+                            <div class="lesson-info">
+                                <i class="fas fa-clock"></i> @lesson.StartTime.ToString("dd.MM.yyyy HH:mm") - @lesson.EndTime.ToString("HH:mm")
+                            </div>
                         </div>
                         <div class="lesson-body">
-                            <div class="lesson-info">
-                                <i class="fas fa-book"></i>
-                                <span>@lesson.Subject.Name</span>
-                            </div>
-                            <div class="lesson-info">
-                                <i class="fas fa-clock"></i>
-                                <span>@lesson.DurationMinutes минут</span>
-                            </div>
-                            <div class="lesson-info">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span>@lesson.StartTime.ToString("dd.MM.yyyy HH:mm") - @lesson.EndTime.ToString("HH:mm")</span>
-                            </div>
-                            <div class="lesson-description">
-                                @lesson.Description
-                            </div>
+                            <div class="lesson-description">@lesson.Description</div>
                         </div>
                         <div class="lesson-footer">
-                            <div class="students-count">
-                                <i class="fas fa-user-graduate"></i> @ViewBag.BookingsCount[lesson.Id] учеников
-                            </div>
-                            <form asp-action="Delete" asp-route-id="@lesson.Id" method="post" 
-                                  onsubmit="return confirm('Вы уверены, что хотите удалить этот урок?');">
-                                <button type="submit" class="btn btn-delete" 
-                                        @(ViewBag.BookingsCount[lesson.Id] > 0 ? "disabled" : "")>
+                            <div class="lesson-price">@lesson.Price ₽</div>
+                            <form asp-action="Delete" asp-route-id="@lesson.Id" method="post" style="display: inline;">
+                                <button type="submit" class="btn-delete" 
+                                        @(lesson.Bookings.Any() ? "disabled" : "")>
                                     <i class="fas fa-trash"></i> Удалить
                                 </button>
                             </form>

@@ -29,94 +29,83 @@ namespace WebApplication1.Controllers
 
         // POST: Lessons/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Учитель")]
         public async Task<IActionResult> Create(string title, string description, decimal price, DateTime startTime, DateTime endTime, int subjectId)
         {
-            // Проверяем, существует ли урок с таким названием
-            var existingLesson = await _context.Lessons.FirstOrDefaultAsync(l => l.Title == title);
-            if (existingLesson != null)
+            // Получаем email пользователя из Claims
+            var emailClaim = User.FindFirst(ClaimTypes.Email);
+            if (emailClaim == null)
             {
-                ModelState.AddModelError("Title", "Урок с таким названием уже существует");
+                ModelState.AddModelError("", "Не удалось определить email пользователя");
                 ViewBag.Subjects = new SelectList(_context.Subjects, "Id", "Name");
                 return View();
             }
 
-            // Логируем все Claims пользователя
-            foreach (var claim in User.Claims)
+            // Получаем пользователя по email
+            var teacher = await _context.Users.FirstOrDefaultAsync(u => u.Email == emailClaim.Value);
+            if (teacher == null)
             {
-                System.Diagnostics.Debug.WriteLine($"Claim Type: {claim.Type}, Value: {claim.Value}");
+                ModelState.AddModelError("", "Учитель не найден в базе данных");
+                ViewBag.Subjects = new SelectList(_context.Subjects, "Id", "Name");
+                return View();
             }
 
-            // Логируем полученные данные
-            System.Diagnostics.Debug.WriteLine($"SubjectId: {subjectId}");
-            System.Diagnostics.Debug.WriteLine($"User.Identity.Name: {User.Identity.Name}");
-
-            try
+            var lesson = new Lesson
             {
-                // Получаем email пользователя из Claims
-                var emailClaim = User.FindFirst(ClaimTypes.Email);
-                if (emailClaim == null)
-                {
-                    ModelState.AddModelError("", "Не удалось определить email пользователя");
-                    ViewBag.Subjects = new SelectList(_context.Subjects, "Id", "Name");
-                    return View();
-                }
-
-                // Получаем пользователя по email
-                var teacher = await _context.Users.FirstOrDefaultAsync(u => u.Email == emailClaim.Value);
-                if (teacher == null)
-                {
-                    ModelState.AddModelError("", "Учитель не найден в базе данных");
-                    ViewBag.Subjects = new SelectList(_context.Subjects, "Id", "Name");
-                    return View();
-                }
-
-                System.Diagnostics.Debug.WriteLine($"Found TeacherId: {teacher.Id}");
-
-                var lesson = new Lesson
-                {
-                    Title = title,
-                    Description = description,
-                    Price = price,
-                    StartTime = startTime,
-                    EndTime = endTime,
-                    SubjectId = subjectId,
-                    TutorId = teacher.Id,
-                    DurationMinutes = (int)(endTime - startTime).TotalMinutes
-                };
-                
-                _context.Add(lesson);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Home");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Exception: {ex.Message}");
-                ModelState.AddModelError("", "Ошибка при сохранении урока: " + ex.Message);
-            }
-
-            ViewBag.Subjects = new SelectList(_context.Subjects, "Id", "Name");
-            return View();
+                Title = title,
+                Description = description,
+                Price = price,
+                StartTime = startTime,
+                EndTime = endTime,
+                SubjectId = subjectId,
+                TutorId = teacher.Id,
+                DurationMinutes = (int)(endTime - startTime).TotalMinutes
+            };
+            
+            _context.Add(lesson);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index", "Home");
         }
 
         [Authorize(Roles = "Учитель")]
         public async Task<IActionResult> MyLessons()
         {
-            var teacherEmail = User.FindFirstValue(ClaimTypes.Email);
-            var teacher = await _context.Users.FirstOrDefaultAsync(u => u.Email == teacherEmail);
+            var currentTime = DateTime.Now;
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            var teacher = await _context.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
             
             if (teacher == null)
             {
                 return NotFound("Учитель не найден");
             }
-
+            
             var lessons = await _context.Lessons
                 .Include(l => l.Subject)
-                .Include(l => l.Tutor)
+                .Include(l => l.Bookings)
+                    .ThenInclude(b => b.Status)
                 .Where(l => l.TutorId == teacher.Id)
                 .OrderByDescending(l => l.StartTime)
                 .ToListAsync();
+
+            // Обновляем статусы записей
+            foreach (var lesson in lessons)
+            {
+                foreach (var booking in lesson.Bookings)
+                {
+                    if (lesson.StartTime < currentTime && booking.Status.Name != "Отменено")
+                    {
+                        var completedStatus = await _context.BookingStatuses
+                            .FirstOrDefaultAsync(s => s.Name == "Завершен");
+                        
+                        if (completedStatus != null && booking.StatusId != completedStatus.Id)
+                        {
+                            booking.StatusId = completedStatus.Id;
+                        }
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
 
             // Получаем количество бронирований для каждого урока
             var bookingsCount = new Dictionary<int, int>();
@@ -212,6 +201,21 @@ namespace WebApplication1.Controllers
             var lessons = await query.ToListAsync();
             var subjects = await _context.Subjects.OrderBy(s => s.Name).ToListAsync();
 
+            // Получаем список записей текущего пользователя
+            if (User.Identity.IsAuthenticated)
+            {
+                var userEmail = User.FindFirstValue(ClaimTypes.Email);
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
+                if (user != null)
+                {
+                    var userBookings = await _context.Bookings
+                        .Where(b => b.StudentId == user.Id)
+                        .Select(b => b.LessonId)
+                        .ToListAsync();
+                    ViewBag.UserBookings = userBookings;
+                }
+            }
+
             ViewBag.SearchString = searchString;
             ViewBag.SubjectId = subjectId;
             ViewBag.SortOrder = sortOrder;
@@ -272,12 +276,22 @@ namespace WebApplication1.Controllers
 
             try
             {
+                // Получаем статус "Ожидается"
+                var pendingStatus = await _context.BookingStatuses
+                    .FirstOrDefaultAsync(s => s.Name == "Ожидается");
+
+                if (pendingStatus == null)
+                {
+                    TempData["Error"] = "Ошибка: статус 'Ожидается' не найден";
+                    return RedirectToAction(nameof(Search));
+                }
+
                 // Создаем новую запись
                 var booking = new Booking
                 {
                     LessonId = id,
                     StudentId = student.Id,
-                    StatusId = 1 // Предполагаем, что 1 - это ID статуса "Ожидает подтверждения"
+                    StatusId = pendingStatus.Id
                 };
 
                 _context.Bookings.Add(booking);
@@ -296,14 +310,16 @@ namespace WebApplication1.Controllers
         [Authorize(Roles = "Ученик")]
         public async Task<IActionResult> MyBookings()
         {
-            var studentEmail = User.FindFirstValue(ClaimTypes.Email);
-            var student = await _context.Users.FirstOrDefaultAsync(u => u.Email == studentEmail);
+            var currentTime = DateTime.Now;
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            var student = await _context.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
             
             if (student == null)
             {
                 return NotFound("Ученик не найден");
             }
-
+            
+            // Получаем все записи пользователя
             var bookings = await _context.Bookings
                 .Include(b => b.Lesson)
                     .ThenInclude(l => l.Subject)
@@ -314,6 +330,22 @@ namespace WebApplication1.Controllers
                 .OrderByDescending(b => b.Lesson.StartTime)
                 .ToListAsync();
 
+            // Обновляем статусы записей
+            foreach (var booking in bookings)
+            {
+                if (booking.Lesson.StartTime < currentTime && booking.Status.Name != "Отменено")
+                {
+                    var completedStatus = await _context.BookingStatuses
+                        .FirstOrDefaultAsync(s => s.Name == "Завершен");
+                    
+                    if (completedStatus != null && booking.StatusId != completedStatus.Id)
+                    {
+                        booking.StatusId = completedStatus.Id;
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
             return View(bookings);
         }
 
@@ -507,6 +539,35 @@ namespace WebApplication1.Controllers
             }
 
             return RedirectToAction(nameof(AdminPanel));
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var query = _context.Lessons
+                .Include(l => l.Subject)
+                .Include(l => l.Tutor)
+                .Where(l => l.StartTime >= DateTime.Now)
+                .OrderBy(l => l.StartTime)
+                .AsQueryable();
+
+            var lessons = await query.ToListAsync();
+
+            // Получаем список записей текущего пользователя
+            if (User.Identity.IsAuthenticated)
+            {
+                var userEmail = User.FindFirstValue(ClaimTypes.Email);
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
+                if (user != null)
+                {
+                    var userBookings = await _context.Bookings
+                        .Where(b => b.StudentId == user.Id)
+                        .Select(b => b.LessonId)
+                        .ToListAsync();
+                    ViewBag.UserBookings = userBookings;
+                }
+            }
+
+            return View(lessons);
         }
     }
 } 

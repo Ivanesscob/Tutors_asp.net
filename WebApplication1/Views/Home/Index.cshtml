@@ -150,6 +150,44 @@
             color: #6B73FF;
             margin-bottom: 1rem;
         }
+
+        .booked-lesson {
+            background-color: #f8f9fa;
+            border-color: #e9ecef;
+            opacity: 0.8;
+        }
+
+        .booked-lesson .card-header {
+            background-color: #e9ecef;
+        }
+
+        .booked-lesson .btn-primary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .booked-lesson .btn-primary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+        .booked-lesson .lesson-header {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        }
+
+        .booked-lesson .lesson-info i {
+            color: #6c757d;
+        }
+
+        .booked-lesson .btn-signup {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            cursor: not-allowed;
+        }
+
+        .booked-lesson .btn-signup:hover {
+            transform: none;
+            box-shadow: none;
+        }
     </style>
 }
 
@@ -169,12 +207,11 @@
         <div class="row">
             @foreach (var lesson in Model)
             {
+                var isBooked = ViewBag.UserBookings != null && ViewBag.UserBookings.Contains(lesson.Id);
                 <div class="col-md-6">
-                    <div class="card lesson-card">
+                    <div class="card lesson-card @(isBooked ? "booked-lesson" : "")">
                         <div class="lesson-header">
-                            <div class="lesson-price">
-                                <i class="fas fa-tag"></i> @lesson.Price ₽
-                            </div>
+                            <div class="lesson-price">@lesson.Price ₽</div>
                             <div class="lesson-title">@lesson.Title</div>
                         </div>
                         <div class="lesson-body">
@@ -202,8 +239,8 @@
                             @if (User.Identity.IsAuthenticated && User.IsInRole("Ученик"))
                             {
                                 <form asp-controller="Lessons" asp-action="SignUp" asp-route-id="@lesson.Id" method="post">
-                                    <button type="submit" class="btn btn-signup">
-                                        <i class="fas fa-check-circle"></i> Записаться
+                                    <button type="submit" class="btn btn-signup" @(isBooked ? "disabled" : "")>
+                                        <i class="fas fa-calendar-check"></i> @(isBooked ? "Вы уже записаны" : "Записаться")
                                     </button>
                                 </form>
                             }

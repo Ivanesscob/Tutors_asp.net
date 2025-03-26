@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\codeProjects\\c#\\WebApplication1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|c:\\codeprojects\\c#\\webapplication1\\webapplication1\\controllers\\lessonscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\lessonscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|c:\\codeprojects\\c#\\webapplication1\\webapplication1\\views\\lessons\\mylessons.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\views\\lessons\\mylessons.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|c:\\codeprojects\\c#\\webapplication1\\webapplication1\\controllers\\lessonscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\lessonscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{397E3855-ABFF-472B-B30A-BE6E286EB5FD}|WebApplication1\\WebApplication1.csproj|c:\\codeprojects\\c#\\webapplication1\\webapplication1\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -42,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,15 +50,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "MyLessons.cshtml",
               "DocumentMoniker": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Views\\Lessons\\MyLessons.cshtml",
               "RelativeDocumentMoniker": "WebApplication1\\Views\\Lessons\\MyLessons.cshtml",
               "ToolTip": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Views\\Lessons\\MyLessons.cshtml",
               "RelativeToolTip": "WebApplication1\\Views\\Lessons\\MyLessons.cshtml",
-              "ViewState": "AgIAAM0AAAAAAAAAAAArwNYAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAKsAAAAAAAAAAAAawLsAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-26T19:49:59.831Z"
+              "WhenOpened": "2025-03-26T19:49:59.831Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -74,13 +75,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "LessonsController.cs",
               "DocumentMoniker": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Controllers\\LessonsController.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Controllers\\LessonsController.cs",
               "ToolTip": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Controllers\\LessonsController.cs",
               "RelativeToolTip": "WebApplication1\\Controllers\\LessonsController.cs",
-              "ViewState": "AgIAAGkBAAAAAAAAAAAtwHUBAAAnAAAAAAAAAA==",
+              "ViewState": "AgIAADcBAAAAAAAAAAArwEUBAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-26T19:20:59.354Z",
               "EditorCaption": ""

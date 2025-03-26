@@ -17,11 +17,14 @@ namespace WebApplication1.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var lessons = await _context.Lessons
+            var query = _context.Lessons
                 .Include(l => l.Subject)
                 .Include(l => l.Tutor)
-                .OrderByDescending(l => l.StartTime)
-                .ToListAsync();
+                .Where(l => l.StartTime >= DateTime.Now)
+                .OrderBy(l => l.StartTime)
+                .AsQueryable();
+
+            var lessons = await query.ToListAsync();
             return View(lessons);
         }
 

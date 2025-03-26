@@ -1,0 +1,96 @@
+@model IEnumerable<WebApplication1.Models.Lesson>
+
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col">
+            <h2>Доступные уроки</h2>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Нет доступных уроков.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var lesson in Model)
+            {
+                var isBooked = ViewBag.UserBookings != null && ViewBag.UserBookings.Contains(lesson.Id);
+                <div class="col-md-6 mb-4">
+                    <div class="card lesson-card @(isBooked ? "booked-lesson" : "")">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">@lesson.Title</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">@lesson.Description</p>
+                            <ul class="list-unstyled">
+                                <li><strong>Предмет:</strong> @lesson.Subject.Name</li>
+                                <li><strong>Учитель:</strong> @lesson.Tutor.FirstName @lesson.Tutor.LastName</li>
+                                <li><strong>Время:</strong> @lesson.StartTime.ToString("dd.MM.yyyy HH:mm") - @lesson.EndTime.ToString("HH:mm")</li>
+                                <li><strong>Длительность:</strong> @lesson.DurationMinutes минут</li>
+                                <li><strong>Цена:</strong> @lesson.Price ₽</li>
+                            </ul>
+                        </div>
+                        <div class="card-footer">
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Ученик"))
+                            {
+                                <form asp-action="SignUp" asp-route-id="@lesson.Id" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-primary" @(isBooked ? "disabled" : "")>
+                                        <i class="fas fa-calendar-check"></i> @(isBooked ? "Вы уже записаны" : "Записаться")
+                                    </button>
+                                </form>
+                            }
+                            else if (!User.Identity.IsAuthenticated)
+                            {
+                                <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary">
+                                    <i class="fas fa-sign-in-alt"></i> Войти для записи
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .lesson-card {
+        transition: all 0.3s ease;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .lesson-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .booked-lesson {
+        background-color: #f8f9fa;
+        border-color: #e9ecef;
+        opacity: 0.8;
+    }
+
+    .booked-lesson .card-header {
+        background-color: #e9ecef;
+    }
+
+    .booked-lesson .btn-primary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .booked-lesson .btn-primary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+</style> 
