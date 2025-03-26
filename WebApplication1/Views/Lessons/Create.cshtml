@@ -1,0 +1,93 @@
+@model WebApplication1.Models.Lesson
+
+@{
+    ViewData["Title"] = "Создать урок";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow" style="width: 100%; max-width: 600px;">
+        <div class="card-body">
+            <h1 class="card-title text-center mb-4">Создать новый урок</h1>
+
+            <form asp-action="Create" method="post" id="lessonForm">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input asp-for="Price" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="SubjectId" class="control-label"></label>
+                    <select asp-for="SubjectId" class="form-control" asp-items="ViewBag.Subjects">
+                        <option value="">-- Выберите предмет --</option>
+                    </select>
+                    <span asp-validation-for="SubjectId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="StartTime" class="control-label"></label>
+                    <input asp-for="StartTime" class="form-control" type="datetime-local" id="startTime" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                    <span asp-validation-for="StartTime" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="EndTime" class="control-label"></label>
+                    <input asp-for="EndTime" class="form-control" type="datetime-local" id="endTime" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                    <span asp-validation-for="EndTime" class="text-danger"></span>
+                </div>
+
+                <div class="form-group text-center">
+                    <input type="submit" value="Создать" class="btn btn-primary" />
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Назад</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        document.getElementById('lessonForm').addEventListener('submit', function(e) {
+            const startTime = new Date(document.getElementById('startTime').value);
+            const endTime = new Date(document.getElementById('endTime').value);
+            const now = new Date();
+            
+            // Проверка на прошедшую дату
+            if (startTime < now) {
+                e.preventDefault();
+                alert('Нельзя выбрать прошедшую дату');
+                return;
+            }
+            
+            // Проверка, что начало не позже конца
+            if (startTime >= endTime) {
+                e.preventDefault();
+                alert('Время начала урока должно быть раньше времени окончания');
+                return;
+            }
+
+            // Проверка длительности (от 30 минут до 5 часов)
+            const durationMinutes = (endTime - startTime) / (1000 * 60);
+            if (durationMinutes < 30 || durationMinutes > 300) {
+                e.preventDefault();
+                alert('Длительность урока должна быть от 30 минут до 5 часов');
+                return;
+            }
+        });
+    </script>
+} 
