@@ -34,7 +34,7 @@ namespace WebApplication1.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Проверяем, существует ли пользователь с таким email
+                
                 var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (existingUser != null)
                 {
@@ -49,7 +49,7 @@ namespace WebApplication1.Controllers
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     Email = model.Email,
-                    Password = model.Password, // В реальном приложении пароль нужно хешировать
+                    Password = model.Password, 
                     RoleId = model.RoleId
                 };
 

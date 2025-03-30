@@ -50,12 +50,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -64,22 +60,9 @@
               "RelativeDocumentMoniker": "WebApplication1\\Controllers\\AccountController.cs",
               "ToolTip": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Controllers\\AccountController.cs",
               "RelativeToolTip": "WebApplication1\\Controllers\\AccountController.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAjwBcAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAjwBkAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-26T22:49:16.236Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Bookings.cshtml",
-              "DocumentMoniker": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Views\\Admin\\Bookings.cshtml",
-              "RelativeDocumentMoniker": "WebApplication1\\Views\\Admin\\Bookings.cshtml",
-              "ToolTip": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Views\\Admin\\Bookings.cshtml",
-              "RelativeToolTip": "WebApplication1\\Views\\Admin\\Bookings.cshtml",
-              "ViewState": "AgIAAHUAAAAAAAAAAAArwLwAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-26T22:44:52.324Z",
               "EditorCaption": ""
             },
             {
@@ -92,8 +75,7 @@
               "RelativeToolTip": "WebApplication1\\Views\\Lessons\\MyLessons.cshtml",
               "ViewState": "AgIAAKsAAAAAAAAAAAAawLsAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-26T19:49:59.831Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-26T19:49:59.831Z"
             },
             {
               "$type": "Document",
@@ -157,6 +139,18 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Bookings.cshtml",
+              "DocumentMoniker": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Views\\Admin\\Bookings.cshtml",
+              "RelativeDocumentMoniker": "WebApplication1\\Views\\Admin\\Bookings.cshtml",
+              "ToolTip": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Views\\Admin\\Bookings.cshtml",
+              "RelativeToolTip": "WebApplication1\\Views\\Admin\\Bookings.cshtml",
+              "ViewState": "AgIAAHUAAAAAAAAAAAArwLwAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-26T22:44:52.324Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 9,
               "Title": "20250326162421_das.cs",
               "DocumentMoniker": "C:\\codeProjects\\c#\\WebApplication1\\WebApplication1\\Migrations\\20250326162421_das.cs",
@@ -178,6 +172,10 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-26T16:21:15.828Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             }
           ]
         }

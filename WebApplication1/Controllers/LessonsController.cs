@@ -107,7 +107,7 @@ namespace WebApplication1.Controllers
 
             await _context.SaveChangesAsync();
 
-            // Получаем количество бронирований для каждого урока
+           
             var bookingsCount = new Dictionary<int, int>();
             foreach (var lesson in lessons)
             {
@@ -175,13 +175,13 @@ namespace WebApplication1.Controllers
                 );
             }
 
-            // Фильтрация по предмету
+           
             if (subjectId.HasValue)
             {
                 query = query.Where(l => l.SubjectId == subjectId.Value);
             }
 
-            // Сортировка
+           
             switch (sortOrder)
             {
                 case "date_desc":
@@ -201,7 +201,7 @@ namespace WebApplication1.Controllers
             var lessons = await query.ToListAsync();
             var subjects = await _context.Subjects.OrderBy(s => s.Name).ToListAsync();
 
-            // Получаем список записей текущего пользователя
+           
             if (User.Identity.IsAuthenticated)
             {
                 var userEmail = User.FindFirstValue(ClaimTypes.Email);
@@ -229,7 +229,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp(int id)
         {
-            // Получаем урок
+            
             var lesson = await _context.Lessons
                 .Include(l => l.Tutor)
                 .FirstOrDefaultAsync(l => l.Id == id);
@@ -240,14 +240,14 @@ namespace WebApplication1.Controllers
                 return RedirectToAction(nameof(Search));
             }
 
-            // Проверяем, не прошел ли уже урок
+            
             if (lesson.StartTime < DateTime.Now)
             {
                 TempData["Error"] = "Нельзя записаться на прошедший урок";
                 return RedirectToAction(nameof(Search));
             }
 
-            // Получаем текущего пользователя
+            
             var studentEmail = User.FindFirstValue(ClaimTypes.Email);
             var student = await _context.Users.FirstOrDefaultAsync(u => u.Email == studentEmail);
 
@@ -257,14 +257,14 @@ namespace WebApplication1.Controllers
                 return RedirectToAction(nameof(Search));
             }
 
-            // Проверяем, не является ли ученик учителем этого урока
+           
             if (student.Id == lesson.TutorId)
             {
                 TempData["Error"] = "Вы не можете записаться на свой урок";
                 return RedirectToAction(nameof(Search));
             }
 
-            // Проверяем, не записан ли уже ученик на этот урок
+           
             var existingBooking = await _context.Bookings
                 .FirstOrDefaultAsync(b => b.LessonId == id && b.StudentId == student.Id);
 
@@ -276,7 +276,7 @@ namespace WebApplication1.Controllers
 
             try
             {
-                // Получаем статус "Ожидается"
+                
                 var pendingStatus = await _context.BookingStatuses
                     .FirstOrDefaultAsync(s => s.Name == "Ожидается");
 
@@ -286,7 +286,7 @@ namespace WebApplication1.Controllers
                     return RedirectToAction(nameof(Search));
                 }
 
-                // Создаем новую запись
+                
                 var booking = new Booking
                 {
                     LessonId = id,
@@ -319,7 +319,7 @@ namespace WebApplication1.Controllers
                 return NotFound("Ученик не найден");
             }
             
-            // Получаем все записи пользователя
+            
             var bookings = await _context.Bookings
                 .Include(b => b.Lesson)
                     .ThenInclude(l => l.Subject)
@@ -330,7 +330,7 @@ namespace WebApplication1.Controllers
                 .OrderByDescending(b => b.Lesson.StartTime)
                 .ToListAsync();
 
-            // Обновляем статусы записей
+            
             foreach (var booking in bookings)
             {
                 if (booking.Lesson.StartTime < currentTime && booking.Status.Name != "Отменено")
@@ -370,7 +370,7 @@ namespace WebApplication1.Controllers
                 return NotFound("Запись не найдена");
             }
 
-            // Проверяем, не прошел ли уже урок
+           
             if (booking.Lesson.StartTime < DateTime.Now)
             {
                 TempData["Error"] = "Нельзя отменить запись на прошедший урок";
@@ -394,14 +394,14 @@ namespace WebApplication1.Controllers
         [Authorize(Roles = "Админ")]
         public async Task<IActionResult> AdminPanel()
         {
-            // Получаем все уроки с информацией о предмете и учителе
+            
             var lessons = await _context.Lessons
                 .Include(l => l.Subject)
                 .Include(l => l.Tutor)
                 .OrderByDescending(l => l.StartTime)
                 .ToListAsync();
 
-            // Получаем все бронирования с информацией об уроке, ученике и статусе
+           
             var bookings = await _context.Bookings
                 .Include(b => b.Lesson)
                     .ThenInclude(l => l.Subject)
@@ -412,7 +412,7 @@ namespace WebApplication1.Controllers
                 .OrderByDescending(b => b.Lesson.StartTime)
                 .ToListAsync();
 
-            // Получаем все роли и предметы
+      
             var roles = await _context.UserRoles.ToListAsync();
             var subjects = await _context.Subjects.ToListAsync();
 
@@ -449,9 +449,9 @@ namespace WebApplication1.Controllers
 
             try
             {
-                // Удаляем все связанные бронирования
+            
                 _context.Bookings.RemoveRange(lesson.Bookings);
-                // Удаляем сам урок
+                
                 _context.Lessons.Remove(lesson);
                 await _context.SaveChangesAsync();
                 TempData["Success"] = "Урок успешно удален";
@@ -552,7 +552,7 @@ namespace WebApplication1.Controllers
 
             var lessons = await query.ToListAsync();
 
-            // Получаем список записей текущего пользователя
+        
             if (User.Identity.IsAuthenticated)
             {
                 var userEmail = User.FindFirstValue(ClaimTypes.Email);

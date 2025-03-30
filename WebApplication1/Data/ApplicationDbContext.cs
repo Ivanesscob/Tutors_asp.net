@@ -21,7 +21,7 @@ namespace WebApplication1.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Настраиваем отношения для Booking
+
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.Lesson)
                 .WithMany(l => l.Bookings)
@@ -40,7 +40,7 @@ namespace WebApplication1.Data
                 .HasForeignKey(b => b.StatusId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // Настраиваем отношения для Lesson
+    
             modelBuilder.Entity<Lesson>()
                 .HasOne(l => l.Tutor)
                 .WithMany()
@@ -53,7 +53,6 @@ namespace WebApplication1.Data
                 .HasForeignKey(l => l.SubjectId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // Настраиваем отношения для User
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Role)
                 .WithMany()
